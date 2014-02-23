@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
   before_save { email.downcase! }
@@ -16,6 +18,10 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def feed
+    microposts
   end
 
   private
